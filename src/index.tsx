@@ -1,14 +1,27 @@
-import React from 'react';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
+import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { HelmetProvider } from 'react-helmet-async';
+import { Router } from 'react-router-dom';
+
 import App from './App';
+import history from './base/routes/history';
 import reportWebVitals from './reportWebVitals';
+import { theme } from './styles/muiTheme';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <StrictMode>
+    <ThemeProvider theme={theme}>
+      <HelmetProvider>
+        <Router history={history}>
+          <CssBaseline />
+          <App />
+        </Router>
+      </HelmetProvider>
+    </ThemeProvider>
+  </StrictMode>,
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function
