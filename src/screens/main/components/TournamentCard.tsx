@@ -1,13 +1,22 @@
 import { Paper, Typography } from '@mui/material';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const PaperCard: React.FC = () => {
+interface ITournamentCardProps {
+  id: number;
+  name: string;
+}
+
+const TournamentCard: React.FC<ITournamentCardProps> = ({ id, name }) => {
   return (
-    <Paper sx={{ padding: 2 }}>
-      <Typography variant="body1">АПЛ 21/22</Typography>
-      <Typography variant="body1">Матчей: 22</Typography>
-    </Paper>
+    <Link className="router-link" to={`tournament/${id}`}>
+      <Paper elevation={10} sx={{ padding: 2 }}>
+        <Typography variant="h4" component="h2">
+          {name}
+        </Typography>
+      </Paper>
+    </Link>
   );
 };
 
-export default PaperCard;
+export default TournamentCard;

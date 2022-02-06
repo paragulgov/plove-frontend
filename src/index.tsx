@@ -3,10 +3,12 @@ import { ThemeProvider } from '@mui/material/styles';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 
 import App from './App';
 import history from './base/routes/history';
+import { store } from './base/store';
 import reportWebVitals from './reportWebVitals';
 import { theme } from './styles/muiTheme';
 
@@ -15,8 +17,10 @@ ReactDOM.render(
     <ThemeProvider theme={theme}>
       <HelmetProvider>
         <Router history={history}>
-          <CssBaseline />
-          <App />
+          <Provider store={store}>
+            <CssBaseline />
+            <App />
+          </Provider>
         </Router>
       </HelmetProvider>
     </ThemeProvider>

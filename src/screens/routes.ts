@@ -2,8 +2,9 @@ import { RoutesType } from '../base/routes/types/RouteTypes';
 import LoginScreen from './login/LoginScreen';
 import MainScreen from './main/MainScreen';
 import NotFoundScreen from './not-found/NotFoundScreen';
+import TournamentScreen from './tournament/TournamentScreen';
 
-const screens = { MainScreen, NotFoundScreen, LoginScreen };
+const screens = { MainScreen, NotFoundScreen, LoginScreen, TournamentScreen };
 
 type RoutesKeys = keyof typeof screens;
 export const routes: RoutesType<RoutesKeys> = {
@@ -14,14 +15,19 @@ export const routes: RoutesType<RoutesKeys> = {
     component: screens.MainScreen,
     // credentials: [roles.admin],
   },
-  NotFoundScreen: {
-    path: '/not-found',
-    title: '404 Страница не найдена',
-    component: screens.NotFoundScreen,
+  TournamentScreen: {
+    path: '/tournament/:id',
+    title: 'Матчи турнира',
+    component: screens.TournamentScreen,
   },
   LoginScreen: {
     path: '/login/vk',
     title: 'Авторизация',
     component: screens.LoginScreen,
+  },
+  NotFoundScreen: {
+    path: '/not-found',
+    title: '404 - Страница не найдена',
+    component: screens.NotFoundScreen,
   },
 };
