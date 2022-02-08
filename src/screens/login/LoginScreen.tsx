@@ -29,8 +29,8 @@ const LoginScreen: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 3 }}>
-      {query.get('code')}
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      Пожалуйста, подождите...
     </Container>
   );
 };

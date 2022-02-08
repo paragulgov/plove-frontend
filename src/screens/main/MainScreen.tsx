@@ -2,7 +2,9 @@ import { Container, Stack } from '@mui/material';
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
+import { makePath } from '../../base/routes/utils/makePath';
 import { fetchTournaments, selectTournaments } from '../../redux/tournaments/tournamentsSlice';
+import { routes } from '../routes';
 import TournamentCard from './components/TournamentCard';
 
 const MainScreen: React.FC = () => {
@@ -14,10 +16,16 @@ const MainScreen: React.FC = () => {
   }, []);
 
   return (
-    <Container maxWidth="md" sx={{ py: 3 }}>
+    <Container maxWidth="md" sx={{ py: 4 }}>
       <Stack spacing={3}>
         {tournaments?.map(({ id, name }) => {
-          return <TournamentCard key={id} id={id} name={name} />;
+          return (
+            <TournamentCard
+              key={id}
+              name={name}
+              path={makePath(routes.TournamentScreen.path, [{ p: 'tournamentId', v: id }])}
+            />
+          );
         })}
       </Stack>
     </Container>

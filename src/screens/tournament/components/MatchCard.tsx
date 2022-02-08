@@ -2,21 +2,23 @@ import { Paper, Typography } from '@mui/material';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-interface ITournamentCardProps {
-  name: string;
+interface IMatchCardProps {
+  id: number;
+  homeTeam: string;
+  awayTeam: string;
   path: string;
 }
 
-const TournamentCard: React.FC<ITournamentCardProps> = ({ name, path }) => {
+const MatchCard: React.FC<IMatchCardProps> = ({ id, homeTeam, awayTeam, path }) => {
   return (
     <Link className="router-link" to={path}>
-      <Paper elevation={10} sx={{ padding: 2 }}>
+      <Paper sx={{ padding: 2 }}>
         <Typography variant="h4" component="h2">
-          {name}
+          {id}
         </Typography>
       </Paper>
     </Link>
   );
 };
 
-export default TournamentCard;
+export default MatchCard;

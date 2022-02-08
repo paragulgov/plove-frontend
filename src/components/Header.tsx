@@ -65,14 +65,7 @@ const Header = () => {
         {auth ? (
           <>
             <div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
+              <IconButton size="large" onClick={handleMenu} color="inherit">
                 <AccountCircle />
               </IconButton>
               <Menu
