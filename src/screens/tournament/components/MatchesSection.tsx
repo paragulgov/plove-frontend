@@ -7,6 +7,7 @@ import { makePath } from '../../../base/routes/utils/makePath';
 import { IStringParams } from '../../../base/types/BaseTypes';
 import { clearMatches, fetchMatches, selectMatches } from '../../../redux/matches/matchesSlice';
 import { MatchesPayload } from '../../../redux/matches/types';
+import { setModalOpen } from '../../../redux/user/userSlice';
 import { routes } from '../../routes';
 import MatchCard from './MatchCard';
 
@@ -36,6 +37,10 @@ const MatchesSection: React.FC = () => {
     dispatch(fetchMatches(payload));
   };
 
+  const handleOpenCreateMatchModal = () => {
+    dispatch(setModalOpen({ modal: 'createMatch', value: true }));
+  };
+
   return (
     <>
       {matches.length < 1 ? (
@@ -44,6 +49,9 @@ const MatchesSection: React.FC = () => {
         </Typography>
       ) : (
         <>
+          <Button onClick={handleOpenCreateMatchModal} color="secondary" sx={{ marginBottom: 1 }}>
+            Создать матч
+          </Button>
           <Stack spacing={3} mb={3}>
             {matches.map(({ id, homeTeam, awayTeam }) => {
               return (

@@ -1,5 +1,8 @@
+import { LocalizationProvider } from '@mui/lab';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import ruLocale from 'date-fns/locale/ru';
 import React, { StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -15,14 +18,16 @@ import { theme } from './styles/muiTheme';
 ReactDOM.render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <HelmetProvider>
-        <Router history={history}>
-          <Provider store={store}>
-            <CssBaseline />
-            <App />
-          </Provider>
-        </Router>
-      </HelmetProvider>
+      <LocalizationProvider dateAdapter={DateAdapter} locale={ruLocale}>
+        <HelmetProvider>
+          <Router history={history}>
+            <Provider store={store}>
+              <CssBaseline />
+              <App />
+            </Provider>
+          </Router>
+        </HelmetProvider>
+      </LocalizationProvider>
     </ThemeProvider>
   </StrictMode>,
   document.getElementById('root'),

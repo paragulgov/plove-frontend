@@ -13,8 +13,11 @@ const MatchCard: React.FC<IMatchCardProps> = ({ id, homeTeam, awayTeam, path }) 
   return (
     <Link className="router-link" to={path}>
       <Paper sx={{ padding: 2 }}>
-        <Typography variant="h4" component="h2">
-          {id}
+        <Typography variant="h6" component="h2">
+          {homeTeam} - {awayTeam}
+        </Typography>
+        <Typography variant="subtitle1" component="h2">
+          Прогноз можно сделать до: <b>23 февраля 2022, 23:00</b>
         </Typography>
       </Paper>
     </Link>
