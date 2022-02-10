@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../base/store';
-import { UserData, UserModalsPayload, UserState } from './types';
+import { SnackbarPayload, UserData, UserModalsPayload, UserState } from './types';
 import { UserApi } from './userApi';
 
 const initialState: UserState = {
@@ -12,6 +12,12 @@ const initialState: UserState = {
     calculateBets: false,
     createBet: false,
     createMatch: false,
+    createTournament: false,
+  },
+  snackbar: {
+    open: false,
+    severity: 'info',
+    message: '',
   },
 };
 
@@ -26,6 +32,9 @@ export const userSlice = createSlice({
   reducers: {
     setModalOpen: (state, action: PayloadAction<UserModalsPayload>) => {
       state.modalOpen[action.payload.modal] = action.payload.value;
+    },
+    setSnackbar: (state, action: PayloadAction<SnackbarPayload>) => {
+      state.snackbar = action.payload;
     },
     clearUserData: state => {
       state.data = null;
@@ -46,7 +55,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { clearUserData, setModalOpen } = userSlice.actions;
+export const { clearUserData, setModalOpen, setSnackbar } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.data;
 

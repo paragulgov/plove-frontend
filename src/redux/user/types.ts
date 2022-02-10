@@ -1,4 +1,8 @@
-export type UserModals = 'createBet' | 'calculateBets' | 'createMatch';
+import { AlertColor } from '@mui/material/Alert/Alert';
+
+import { UserRole } from '../../types/types';
+
+export type UserModals = 'createBet' | 'calculateBets' | 'createMatch' | 'createTournament';
 
 export interface UserModalsPayload {
   modal: keyof Record<UserModals, boolean>;
@@ -10,13 +14,20 @@ export interface UserState {
   userGetted: boolean;
   isLoading: boolean;
   modalOpen: Record<UserModals, boolean>;
+  snackbar: SnackbarPayload;
 }
 
 export interface UserData {
   id: number;
   vkId: number;
   fullName: string;
-  role: string;
+  role: UserRole;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface SnackbarPayload {
+  open: boolean;
+  message?: string;
+  severity?: AlertColor;
 }

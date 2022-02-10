@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './base/hooks/hooks';
 import Routes from './base/routes/components/Routes';
 import Header from './components/Header';
+import InfoSnackbar from './components/InfoSnackbar';
 import Loader from './components/UI/Loader';
 import { authMe } from './redux/auth/authSlice';
 import { fetchUser } from './redux/user/userSlice';
@@ -34,6 +35,8 @@ const App = () => {
     <>
       <Header />
       <Routes routes={routes} />
+
+      <InfoSnackbar />
     </>
   );
 };

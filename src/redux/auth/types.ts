@@ -1,4 +1,4 @@
-import { Role } from '../../types/types';
+import { UserRole } from '../../types/types';
 
 export interface AuthState {
   isAuth: boolean;
@@ -14,6 +14,6 @@ export interface LoginVKResponse {
   id: number;
   vkId: 503941146;
   fullName: string;
-  role: Role;
+  role: UserRole;
   token: string;
 }

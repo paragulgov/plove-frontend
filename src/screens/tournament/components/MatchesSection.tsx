@@ -72,9 +72,11 @@ const MatchesSection: React.FC = () => {
             })}
           </Stack>
 
-          <Button onClick={handleLoadMore} variant="outlined" fullWidth disabled={total <= skip}>
-            Загрузить еще
-          </Button>
+          {total > skip && (
+            <Button onClick={handleLoadMore} variant="outlined" fullWidth>
+              Загрузить еще
+            </Button>
+          )}
         </>
       )}
     </>
