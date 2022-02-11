@@ -1,8 +1,9 @@
-import { Button, Container, Stack } from '@mui/material';
+import { Button, Container, Stack, Typography } from '@mui/material';
 import React, { useEffect } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
 import { makePath } from '../../base/routes/utils/makePath';
+import RectangularSkeleton from '../../components/RectangularSkeleton';
 import { clearTournaments, fetchTournaments, selectTournaments } from '../../redux/tournaments/tournamentsSlice';
 import { FetchAllTournamentsRequest } from '../../redux/tournaments/types';
 import { setModalOpen } from '../../redux/user/userSlice';
@@ -14,6 +15,7 @@ const MainScreen: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const tournaments = useAppSelector(selectTournaments);
+  const isLoading = useAppSelector(state => state.tournaments.isLoading);
   const skip = useAppSelector(state => state.tournaments.skip);
   const total = useAppSelector(state => state.tournaments.total);
   const createTournamentModalOpen = useAppSelector(state => state.user.modalOpen.createTournament);
@@ -53,6 +55,14 @@ const MainScreen: React.FC = () => {
         <Button onClick={handleOpenCreateTournamentModal} sx={{ mb: 3 }}>
           Создать турнир
         </Button>
+      )}
+
+      {isLoading && <RectangularSkeleton height={101} spacing={3} />}
+
+      {!isLoading && tournaments.length < 1 && (
+        <Typography variant="h6" textAlign="center">
+          Список турниров пуст
+        </Typography>
       )}
 
       <Stack spacing={3} mb={5}>

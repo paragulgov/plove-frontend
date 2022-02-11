@@ -12,6 +12,7 @@ const initialState: UserState = {
     calculateBets: false,
     createBet: false,
     createMatch: false,
+    updateMatch: false,
     createTournament: false,
   },
   snackbar: {

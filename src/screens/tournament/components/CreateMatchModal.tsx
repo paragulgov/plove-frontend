@@ -1,59 +1,89 @@
 import { DateTimePicker } from '@mui/lab';
-import { Box, Modal, TextField, Typography } from '@mui/material';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
-import React, { useEffect } from 'react';
+import { Box, Button, Modal, TextField, Typography } from '@mui/material';
+import React, { ChangeEvent } from 'react';
+import { useParams } from 'react-router-dom';
 
-interface ICreateBetModalProps {
+import { useAppDispatch } from '../../../base/hooks/hooks';
+import { IStringParams } from '../../../base/types/BaseTypes';
+import { createMatch } from '../../../redux/matches/matchesSlice';
+import { CreateMatchDto, CreateMatchValues } from '../../../redux/matches/types';
+import { modalStyles } from '../../../styles/commonStyles';
+
+interface ICreateMatchModalProps {
   handleClose: () => void;
   open: boolean;
 }
 
-const CreateMatchModal: React.FC<ICreateBetModalProps> = props => {
-  const { handleClose, open } = props;
-  const [value, setValue] = React.useState<Date | null>(new Date());
+const CreateMatchModal: React.FC<ICreateMatchModalProps> = ({ handleClose, open }) => {
+  const params = useParams<IStringParams>();
+  const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    // new Date("Wed Feb 09 2022 17:52:19 GMT+0300 (Москва, стандартное время)").toISOString() => 2022-02-09T14:52:19.000Z
-    // new Date("2022-02-09T14:52:19.000Z") => Wed Feb 09 2022 17:52:19 GMT+0300 (Москва, стандартное время)
-    console.log(
-      format(new Date('Wed Feb 09 2022 17:57:30 GMT+0300 (Москва, стандартное время)'), 'dd MMMM yyyy hh:mm', {
-        locale: ru,
-      }),
-    );
-  }, [value]);
+  const [values, setValues] = React.useState<CreateMatchValues>({ homeTeam: '', awayTeam: '' });
+  const [date, setDate] = React.useState<Date | null>(new Date());
 
+  const disabled = !values.homeTeam.trim() || !values.awayTeam.trim() || !date;
+
+  // Handlers
+  const handleChangeValues = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleCreateMatch = () => {
+    if (date) {
+      const payload: CreateMatchDto = {
+        ...values,
+        betsWillEndAt: date.toISOString(),
+        tournamentId: +params.tournamentId,
+      };
+
+      dispatch(createMatch(payload));
+    }
+  };
+
+  // Renders
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={style}>
-        <Typography variant="h6" component="h2" mb={2}>
+      <Box sx={modalStyles}>
+        <Typography variant="h6" component="h2" mb={3}>
           Создать матч
         </Typography>
 
-        <DateTimePicker
-          mask="__.__.____ __:__"
-          renderInput={params => <TextField {...params} />}
-          value={value}
-          onChange={newValue => {
-            setValue(newValue);
-          }}
+        <TextField
+          name="homeTeam"
+          value={values.homeTeam}
+          onChange={handleChangeValues}
+          label="Домашняя команда"
+          fullWidth
+          sx={{ mb: 3 }}
         />
+
+        <TextField
+          name="awayTeam"
+          value={values.awayTeam}
+          onChange={handleChangeValues}
+          label="Выездная команда"
+          fullWidth
+          sx={{ mb: 3 }}
+        />
+
+        <Box mb={3}>
+          <DateTimePicker
+            mask="__.__.____ __:__"
+            renderInput={params => <TextField {...params} />}
+            label="Прогноз можно сделать до"
+            value={date}
+            onChange={newValue => setDate(newValue)}
+          />
+        </Box>
+
+        <Button onClick={handleCreateMatch} variant="contained" fullWidth disabled={disabled}>
+          Создать
+        </Button>
       </Box>
     </Modal>
   );
-};
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: 600,
-  minWidth: 300,
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
 };
 
 export default CreateMatchModal;

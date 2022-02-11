@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../base/hooks/hooks';
 import { makePath } from '../../../base/routes/utils/makePath';
 import { IStringParams } from '../../../base/types/BaseTypes';
+import RectangularSkeleton from '../../../components/RectangularSkeleton';
 import { clearMatches, fetchMatches, selectMatches } from '../../../redux/matches/matchesSlice';
 import { MatchesPayload } from '../../../redux/matches/types';
 import { setModalOpen } from '../../../redux/user/userSlice';
@@ -17,7 +18,12 @@ const MatchesSection: React.FC = () => {
 
   const matches = useAppSelector(selectMatches);
   const skip = useAppSelector(state => state.matches.skip);
+  const isLoading = useAppSelector(state => state.matches.isLoading);
   const total = useAppSelector(state => state.matches.total);
+  const role = useAppSelector(state => state.user?.data?.role);
+  const auth = useAppSelector(state => state.auth.isAuth);
+
+  const guard = auth && (role === 'moderator' || role === 'admin');
 
   // Effects
   useEffect(() => {
@@ -43,41 +49,45 @@ const MatchesSection: React.FC = () => {
 
   return (
     <>
-      {matches.length < 1 ? (
-        <Typography variant="h4" textAlign="center">
-          Здесь ничего нет
-        </Typography>
-      ) : (
-        <>
-          <Button onClick={handleOpenCreateMatchModal} color="secondary" sx={{ marginBottom: 1 }}>
-            Создать матч
-          </Button>
-          <Stack spacing={3} mb={3}>
-            {matches.map(({ id, homeTeam, awayTeam }) => {
-              return (
-                <MatchCard
-                  key={id}
-                  id={id}
-                  homeTeam={homeTeam}
-                  awayTeam={awayTeam}
-                  path={makePath(routes.MatchScreen.path, [
-                    {
-                      p: 'tournamentId',
-                      v: params.tournamentId,
-                    },
-                    { p: 'matchId', v: id },
-                  ])}
-                />
-              );
-            })}
-          </Stack>
+      {guard && (
+        <Button onClick={handleOpenCreateMatchModal} color="secondary" sx={{ marginBottom: 1 }}>
+          Создать матч
+        </Button>
+      )}
 
-          {total > skip && (
-            <Button onClick={handleLoadMore} variant="outlined" fullWidth>
-              Загрузить еще
-            </Button>
-          )}
-        </>
+      {isLoading && <RectangularSkeleton height={92} spacing={3} />}
+
+      {!isLoading && matches.length < 1 && (
+        <Typography variant="h6" textAlign="center">
+          Список матчей пуст
+        </Typography>
+      )}
+
+      <Stack spacing={3} mb={3}>
+        {matches.map(({ id, homeTeam, awayTeam, betsWillEndAt }) => {
+          return (
+            <MatchCard
+              key={id}
+              id={id}
+              homeTeam={homeTeam}
+              awayTeam={awayTeam}
+              betsWillEndAt={betsWillEndAt}
+              path={makePath(routes.MatchScreen.path, [
+                {
+                  p: 'tournamentId',
+                  v: params.tournamentId,
+                },
+                { p: 'matchId', v: id },
+              ])}
+            />
+          );
+        })}
+      </Stack>
+
+      {total > skip && (
+        <Button onClick={handleLoadMore} variant="outlined" fullWidth>
+          Загрузить еще
+        </Button>
       )}
     </>
   );
