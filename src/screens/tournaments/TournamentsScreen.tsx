@@ -11,7 +11,7 @@ import { routes } from '../routes';
 import CreateTournamentModal from './components/CreateTournamentModal';
 import TournamentCard from './components/TournamentCard';
 
-const MainScreen: React.FC = () => {
+const TournamentsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const tournaments = useAppSelector(selectTournaments);
@@ -72,7 +72,7 @@ const MainScreen: React.FC = () => {
               key={id}
               name={name}
               createdAt={createdAt}
-              path={makePath(routes.TournamentScreen.path, [{ p: 'tournamentId', v: id }])}
+              path={makePath(routes.MatchesScreen.path, [{ p: 'tournamentId', v: id }])}
             />
           );
         })}
@@ -89,4 +89,4 @@ const MainScreen: React.FC = () => {
   );
 };
 
-export default MainScreen;
+export default TournamentsScreen;

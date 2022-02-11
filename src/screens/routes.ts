@@ -1,32 +1,32 @@
 import { RoutesType } from '../base/routes/types/RouteTypes';
+import BetsScreen from './bets/BetsScreen';
 import LoginScreen from './login/LoginScreen';
-import MainScreen from './main/MainScreen';
-import MatchScreen from './match/MatchScreen';
+import MatchesScreen from './matches/MatchesScreen';
 import NotFoundScreen from './not-found/NotFoundScreen';
-import TournamentScreen from './tournament/TournamentScreen';
+import TournamentsScreen from './tournaments/TournamentsScreen';
 
-const screens = { MainScreen, NotFoundScreen, LoginScreen, TournamentScreen, MatchScreen };
+const screens = { TournamentsScreen, NotFoundScreen, LoginScreen, MatchesScreen, BetsScreen };
 
 type RoutesKeys = keyof typeof screens;
 export const routes: RoutesType<RoutesKeys> = {
-  MainScreen: {
+  TournamentsScreen: {
     path: '/',
     exact: true,
     title: 'Главная',
-    component: screens.MainScreen,
+    component: screens.TournamentsScreen,
     // credentials: [roles.admin],
   },
-  TournamentScreen: {
-    path: '/tournament/:tournamentId',
+  MatchesScreen: {
+    path: '/tournaments/:tournamentId',
     exact: true,
     title: 'Турнир',
-    component: screens.TournamentScreen,
+    component: screens.MatchesScreen,
   },
-  MatchScreen: {
-    path: '/tournament/:tournamentId/match/:matchId',
+  BetsScreen: {
+    path: '/tournaments/:tournamentId/matches/:matchId',
     exact: true,
     title: 'Ставки на матч',
-    component: screens.MatchScreen,
+    component: screens.BetsScreen,
   },
   LoginScreen: {
     path: '/login/vk',

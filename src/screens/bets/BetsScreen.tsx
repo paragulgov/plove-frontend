@@ -11,7 +11,7 @@ import UpdateMatchModal from './components/UpdateMatchModal';
 
 interface IMatchCardProps {}
 
-const MatchScreen: React.FC<IMatchCardProps> = () => {
+const BetsScreen: React.FC<IMatchCardProps> = () => {
   const dispatch = useAppDispatch();
 
   const createBetModal = useAppSelector(state => state.user.modalOpen.createBet);
@@ -43,4 +43,4 @@ const MatchScreen: React.FC<IMatchCardProps> = () => {
   );
 };
 
-export default MatchScreen;
+export default BetsScreen;

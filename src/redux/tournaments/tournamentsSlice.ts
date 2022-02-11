@@ -19,7 +19,7 @@ const initialState: TournamentsState = {
 };
 
 export const fetchTournaments = createAsyncThunk(
-  'tournaments/fetchTournaments',
+  'bets/fetchTournaments',
   async (payload?: FetchAllTournamentsRequest) => {
     const { data } = await TournamentsApi.fetchTournaments(payload);
     return data;
@@ -27,7 +27,7 @@ export const fetchTournaments = createAsyncThunk(
 );
 
 export const createTournament = createAsyncThunk(
-  'tournaments/createTournament',
+  'bets/createTournament',
   async (payload: CreateTournamentValues, thunkAPI) => {
     try {
       const response = await TournamentsApi.createTournaments(payload);

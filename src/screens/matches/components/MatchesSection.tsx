@@ -68,11 +68,10 @@ const MatchesSection: React.FC = () => {
           return (
             <MatchCard
               key={id}
-              id={id}
               homeTeam={homeTeam}
               awayTeam={awayTeam}
               betsWillEndAt={betsWillEndAt}
-              path={makePath(routes.MatchScreen.path, [
+              path={makePath(routes.BetsScreen.path, [
                 {
                   p: 'tournamentId',
                   v: params.tournamentId,

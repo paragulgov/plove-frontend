@@ -5,14 +5,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface IMatchCardProps {
-  id: number;
   homeTeam: string;
   awayTeam: string;
   betsWillEndAt: string;
   path: string;
 }
 
-const MatchCard: React.FC<IMatchCardProps> = ({ id, homeTeam, awayTeam, path, betsWillEndAt }) => {
+const MatchCard: React.FC<IMatchCardProps> = ({ homeTeam, awayTeam, path, betsWillEndAt }) => {
   const date = format(new Date(betsWillEndAt), 'dd MMMM yyyy HH:mm', {
     locale: ru,
   });

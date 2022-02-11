@@ -26,7 +26,7 @@ export const fetchMatches = createAsyncThunk('matches/fetchMatches', async (payl
   }
 });
 
-export const createMatch = createAsyncThunk('tournaments/createMatch', async (payload: CreateMatchDto, thunkAPI) => {
+export const createMatch = createAsyncThunk('bets/createMatch', async (payload: CreateMatchDto, thunkAPI) => {
   try {
     const response = await MatchesApi.createMatch(payload);
 
@@ -41,7 +41,7 @@ export const createMatch = createAsyncThunk('tournaments/createMatch', async (pa
 });
 
 export const updateMatch = createAsyncThunk(
-  'tournaments/updateMatch',
+  'bets/updateMatch',
   async (payload: UpdateMatchRequestPayload, thunkAPI) => {
     try {
       const response = await MatchesApi.updateMatch(payload);

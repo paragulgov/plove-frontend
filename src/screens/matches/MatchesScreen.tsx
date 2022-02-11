@@ -35,7 +35,7 @@ function a11yProps(index: number) {
   };
 }
 
-const TournamentScreen: React.FC = () => {
+const MatchesScreen: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const [tab, setTab] = useState(0);
@@ -73,4 +73,4 @@ const TournamentScreen: React.FC = () => {
   );
 };
 
-export default TournamentScreen;
+export default MatchesScreen;

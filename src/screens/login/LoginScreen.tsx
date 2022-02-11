@@ -25,7 +25,7 @@ const LoginScreen: React.FC = () => {
   }, [query, isAuth, completeCheckAuth]);
 
   if (isAuth) {
-    return <Redirect to={routes.MainScreen.path} />;
+    return <Redirect to={routes.TournamentsScreen.path} />;
   }
 
   return (

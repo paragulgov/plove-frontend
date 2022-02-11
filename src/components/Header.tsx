@@ -100,7 +100,7 @@ const Header = () => {
       <Container disableGutters>
         <Toolbar>
           <Typography variant="h5" component="h1" sx={{ flexGrow: 1 }}>
-            <StyledLink className="router-link" to={routes.MainScreen.path}>
+            <StyledLink className="router-link" to={routes.TournamentsScreen.path}>
               Главная
             </StyledLink>
           </Typography>
