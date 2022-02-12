@@ -1,5 +1,8 @@
 import {
   Avatar,
+  Button,
+  Card,
+  CardContent,
   Divider,
   List,
   ListItem,
@@ -7,69 +10,75 @@ import {
   ListItemText,
   ListSubheader,
   Typography,
-  Paper,
-  Button,
 } from '@mui/material';
 import React from 'react';
+import { useParams } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../base/hooks/hooks';
+import { IStringParams } from '../../../base/types/BaseTypes';
+import { fetchBets } from '../../../redux/bets/betsSlice';
+import { GetBetsQuery } from '../../../redux/bets/types';
 
 const MatchBetsList = () => {
+  const params = useParams<IStringParams>();
+  const dispatch = useAppDispatch();
+  const bets = useAppSelector(state => state.bets.data);
+  const skip = useAppSelector(state => state.bets.skip);
+  const total = useAppSelector(state => state.bets.total);
+
+  const handleLoadMore = () => {
+    const payload: GetBetsQuery = { matchId: +params.matchId, skip: skip };
+    dispatch(fetchBets(payload));
+  };
+
   return (
     <>
-      <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
-        <List
-          sx={{ width: '100%', bgcolor: 'background.paper' }}
-          subheader={
-            <ListSubheader component="div" id="nested-list-subheader">
-              Все прогнозы на матч
-            </ListSubheader>
-          }
-        >
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar>ТЕ</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="Тетяна Енот"
-              secondary={
+      <Card variant="outlined" sx={{ mb: 3 }}>
+        <CardContent sx={{ '&:last-child': { paddingBottom: 2 } }}>
+          <List
+            sx={{ width: '100%', bgcolor: 'background.paper' }}
+            subheader={
+              <ListSubheader component="div" id="nested-list-subheader">
+                Все прогнозы на матч
+              </ListSubheader>
+            }
+          >
+            {bets.map((bet, index, arr) => {
+              return (
                 <>
-                  <Typography component="span" variant="body2">
-                    Прогноз: 2 - 0
-                  </Typography>
-                  <br />
-                  <Typography component="span" variant="body2">
-                    Очков получено: 3
-                  </Typography>
-                </>
-              }
-            />
-          </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                      <Avatar>{bet.user.fullName[0]}</Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={bet.user.fullName}
+                      secondary={
+                        <>
+                          <Typography component="span" variant="body2">
+                            Прогноз: {bet.homeTeamGoalsBet} - {bet.awayTeamGoalsBet}
+                          </Typography>
+                          <br />
+                          <Typography component="span" variant="body2">
+                            Очков получено: {bet.points}
+                          </Typography>
+                        </>
+                      }
+                    />
+                  </ListItem>
 
-          <Divider variant="inset" component="li" />
-
-          <ListItem alignItems="flex-start">
-            <ListItemAvatar>
-              <Avatar>ТЕ</Avatar>
-            </ListItemAvatar>
-            <ListItemText
-              primary="Тетяна Енот"
-              secondary={
-                <>
-                  <Typography component="span" variant="body2">
-                    Прогноз: 2 - 0
-                  </Typography>
-                  <br />
-                  <Typography component="span" variant="body2">
-                    Очков получено: 3
-                  </Typography>
+                  {index < arr.length - 1 && <Divider variant="inset" component="li" />}
                 </>
-              }
-            />
-          </ListItem>
-        </List>
-      </Paper>
-      <Button variant="outlined" fullWidth>
-        Загрузить еще
-      </Button>
+              );
+            })}
+          </List>
+        </CardContent>
+      </Card>
+
+      {total > skip && (
+        <Button onClick={handleLoadMore} variant="outlined" fullWidth>
+          Загрузить еще
+        </Button>
+      )}
     </>
   );
 };

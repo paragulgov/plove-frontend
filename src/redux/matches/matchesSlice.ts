@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { RootState } from '../../base/store';
 import { setModalOpen, setSnackbar } from '../user/userSlice';
-import { MatchesApi } from './tournamentsApi';
+import { MatchesApi } from './matchesApi';
 import {
   CreateMatchDto,
   MatchData,
@@ -14,6 +14,7 @@ import {
 
 const initialState: MatchesState = {
   data: [],
+  currentMatch: null,
   total: 0,
   skip: 0,
   isLoading: false,
@@ -26,7 +27,14 @@ export const fetchMatches = createAsyncThunk('matches/fetchMatches', async (payl
   }
 });
 
-export const createMatch = createAsyncThunk('bets/createMatch', async (payload: CreateMatchDto, thunkAPI) => {
+export const fetchMatchById = createAsyncThunk('matches/fetchMatchById', async (id: number) => {
+  if (!isNaN(id)) {
+    const { data } = await MatchesApi.fetchMatchById(id);
+    return data;
+  }
+});
+
+export const createMatch = createAsyncThunk('matches/createMatch', async (payload: CreateMatchDto, thunkAPI) => {
   try {
     const response = await MatchesApi.createMatch(payload);
 
@@ -41,7 +49,7 @@ export const createMatch = createAsyncThunk('bets/createMatch', async (payload: 
 });
 
 export const updateMatch = createAsyncThunk(
-  'bets/updateMatch',
+  'matches/updateMatch',
   async (payload: UpdateMatchRequestPayload, thunkAPI) => {
     try {
       const response = await MatchesApi.updateMatch(payload);
@@ -82,12 +90,16 @@ export const matchesSlice = createSlice({
       state.isLoading = false;
     });
 
+    builder.addCase(fetchMatchById.fulfilled, (state, action: PayloadAction<MatchData>) => {
+      state.currentMatch = action.payload;
+    });
+
     builder.addCase(createMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
       if (action.payload.id) {
         state.data.unshift(action.payload);
       }
     });
-    // .addCase(updateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
+    // builder.addCase(updateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
     //   if (action.payload.id) {
     //     const { id, betsWillEndAt } = action.payload;
     //     state.data[id].betsWillEndAt = betsWillEndAt;

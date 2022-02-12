@@ -1,5 +1,8 @@
+import { Nullable } from '../../base/types/BaseTypes';
+
 export interface TournamentsState {
   data: TournamentData[];
+  currentTournament: Nullable<TournamentData>;
   total: number;
   skip: number;
   isLoading: boolean;

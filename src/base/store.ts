@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import authReducer from '../redux/auth/authSlice';
+import betsReducer from '../redux/bets/betsSlice';
 import matchesReducer from '../redux/matches/matchesSlice';
 import tournamentsReducer from '../redux/tournaments/tournamentsSlice';
 import userReducer from '../redux/user/userSlice';
@@ -11,6 +12,7 @@ export const store = configureStore({
     user: userReducer,
     tournaments: tournamentsReducer,
     matches: matchesReducer,
+    bets: betsReducer,
   },
 });
 

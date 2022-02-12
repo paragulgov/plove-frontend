@@ -1,7 +1,13 @@
 import { Container } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
+import { IStringParams } from '../../base/types/BaseTypes';
+import { fetchBets } from '../../redux/bets/betsSlice';
+import { GetBetsQuery } from '../../redux/bets/types';
+import { fetchMatchById } from '../../redux/matches/matchesSlice';
+import { fetchTournamentById } from '../../redux/tournaments/tournamentsSlice';
 import { setModalOpen } from '../../redux/user/userSlice';
 import CalculateBetsModal from './components/CalculateBetsModal';
 import CreateBetModal from './components/CreateBetModal';
@@ -12,11 +18,20 @@ import UpdateMatchModal from './components/UpdateMatchModal';
 interface IMatchCardProps {}
 
 const BetsScreen: React.FC<IMatchCardProps> = () => {
+  const params = useParams<IStringParams>();
   const dispatch = useAppDispatch();
 
   const createBetModal = useAppSelector(state => state.user.modalOpen.createBet);
   const calculateBets = useAppSelector(state => state.user.modalOpen.calculateBets);
   const updateMatch = useAppSelector(state => state.user.modalOpen.updateMatch);
+
+  // Effects
+  useEffect(() => {
+    const payload: GetBetsQuery = { matchId: +params.matchId };
+    dispatch(fetchBets(payload));
+    dispatch(fetchMatchById(+params.matchId));
+    dispatch(fetchTournamentById(+params.tournamentId));
+  }, [params.matchId, params.tournamentId]);
 
   // Handlers
   const handleCloseCreateBetModal = () => {
@@ -31,6 +46,7 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
     dispatch(setModalOpen({ modal: 'updateMatch', value: false }));
   };
 
+  // Renders
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <MatchHeader />

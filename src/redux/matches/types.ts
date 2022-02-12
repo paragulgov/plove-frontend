@@ -1,5 +1,8 @@
+import { Nullable } from '../../base/types/BaseTypes';
+
 export interface MatchesState {
   data: MatchData[];
+  currentMatch: Nullable<MatchData>;
   total: number;
   skip: number;
   isLoading: boolean;
@@ -9,8 +12,8 @@ export interface MatchData {
   id: number;
   homeTeam: string;
   awayTeam: string;
-  homeTeamGoals: number | null;
-  awayTeamGoals: number | null;
+  homeTeamGoals: Nullable<number>;
+  awayTeamGoals: Nullable<number>;
   isFinished: boolean;
   createdAt: string;
   updatedAt: string;

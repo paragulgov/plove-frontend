@@ -5,6 +5,9 @@ export const MatchesApi = {
   fetchMatches({ tournamentId, take, skip }: MatchesPayload) {
     return instance.get(`matches/tournament?id=${tournamentId}&take=${20}&skip=${skip || 0}`);
   },
+  fetchMatchById(id: number) {
+    return instance.get(`matches/${id}`);
+  },
   createMatch(payload: CreateMatchDto) {
     return instance.post(`matches`, payload);
   },

@@ -13,21 +13,27 @@ import {
 
 const initialState: TournamentsState = {
   data: [],
+  currentTournament: null,
   total: 0,
   skip: 0,
   isLoading: false,
 };
 
 export const fetchTournaments = createAsyncThunk(
-  'bets/fetchTournaments',
+  'tournaments/fetchTournaments',
   async (payload?: FetchAllTournamentsRequest) => {
     const { data } = await TournamentsApi.fetchTournaments(payload);
     return data;
   },
 );
 
+export const fetchTournamentById = createAsyncThunk('tournaments/fetchTournamentById', async (id: number) => {
+  const { data } = await TournamentsApi.fetchTournamentById(id);
+  return data;
+});
+
 export const createTournament = createAsyncThunk(
-  'bets/createTournament',
+  'tournaments/createTournament',
   async (payload: CreateTournamentValues, thunkAPI) => {
     try {
       const response = await TournamentsApi.createTournaments(payload);
@@ -66,6 +72,10 @@ export const tournamentsSlice = createSlice({
     });
     builder.addCase(fetchTournaments.rejected, state => {
       state.isLoading = false;
+    });
+
+    builder.addCase(fetchTournamentById.fulfilled, (state, action: PayloadAction<TournamentData>) => {
+      state.currentTournament = action.payload;
     });
 
     builder.addCase(createTournament.fulfilled, (state, action: PayloadAction<TournamentData>) => {
