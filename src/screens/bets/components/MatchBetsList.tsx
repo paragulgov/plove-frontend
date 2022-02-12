@@ -18,14 +18,18 @@ import { useAppDispatch, useAppSelector } from '../../../base/hooks/hooks';
 import { IStringParams } from '../../../base/types/BaseTypes';
 import { fetchBets } from '../../../redux/bets/betsSlice';
 import { GetBetsQuery } from '../../../redux/bets/types';
+import BetsListSkeleton from './BetsListSkeleton';
 
 const MatchBetsList = () => {
   const params = useParams<IStringParams>();
   const dispatch = useAppDispatch();
+
   const bets = useAppSelector(state => state.bets.data);
   const skip = useAppSelector(state => state.bets.skip);
   const total = useAppSelector(state => state.bets.total);
+  const isLoading = useAppSelector(state => state.bets.isLoading);
 
+  // Handlers
   const handleLoadMore = () => {
     const payload: GetBetsQuery = { matchId: +params.matchId, skip: skip };
     dispatch(fetchBets(payload));
@@ -43,6 +47,14 @@ const MatchBetsList = () => {
               </ListSubheader>
             }
           >
+            {!isLoading && bets.length < 1 && (
+              <Typography textAlign="center" variant="subtitle2">
+                Пока еще нет прогнозов ;(
+              </Typography>
+            )}
+
+            {isLoading && <BetsListSkeleton />}
+
             {bets.map((bet, index, arr) => {
               return (
                 <>

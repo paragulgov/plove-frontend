@@ -60,7 +60,7 @@ export const updateMatch = createAsyncThunk(
     } catch (error) {
       thunkAPI.dispatch(setSnackbar({ open: true, severity: 'error', message: 'Упс, что-то пошло не так' }));
     } finally {
-      thunkAPI.dispatch(setModalOpen({ modal: 'createMatch', value: false }));
+      thunkAPI.dispatch(setModalOpen({ modal: 'updateMatch', value: false }));
     }
   },
 );
@@ -71,6 +71,7 @@ export const matchesSlice = createSlice({
   reducers: {
     clearMatches: state => {
       state.data = [];
+      state.currentMatch = null;
       state.total = 0;
       state.skip = 0;
       state.isLoading = false;
@@ -90,8 +91,15 @@ export const matchesSlice = createSlice({
       state.isLoading = false;
     });
 
+    builder.addCase(fetchMatchById.pending, state => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchMatchById.fulfilled, (state, action: PayloadAction<MatchData>) => {
       state.currentMatch = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchMatchById.rejected, state => {
+      state.isLoading = false;
     });
 
     builder.addCase(createMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
@@ -99,12 +107,12 @@ export const matchesSlice = createSlice({
         state.data.unshift(action.payload);
       }
     });
-    // builder.addCase(updateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
-    //   if (action.payload.id) {
-    //     const { id, betsWillEndAt } = action.payload;
-    //     state.data[id].betsWillEndAt = betsWillEndAt;
-    //   }
-    // });
+
+    builder.addCase(updateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
+      if (action.payload && state.currentMatch) {
+        state.currentMatch = action.payload;
+      }
+    });
   },
 });
 

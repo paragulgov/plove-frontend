@@ -30,10 +30,16 @@ export const betsSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(fetchBets.pending, state => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchBets.fulfilled, (state, action: PayloadAction<BetsResponse>) => {
       state.data.push(...action.payload.data);
       state.total = action.payload.total;
       state.skip += 30;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchBets.rejected, state => {
       state.isLoading = false;
     });
   },

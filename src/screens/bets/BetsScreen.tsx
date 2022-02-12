@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
 import { IStringParams } from '../../base/types/BaseTypes';
-import { fetchBets } from '../../redux/bets/betsSlice';
+import { clearBets, fetchBets } from '../../redux/bets/betsSlice';
 import { GetBetsQuery } from '../../redux/bets/types';
-import { fetchMatchById } from '../../redux/matches/matchesSlice';
-import { fetchTournamentById } from '../../redux/tournaments/tournamentsSlice';
+import { clearMatches, fetchMatchById } from '../../redux/matches/matchesSlice';
+import { clearCurrentTournament, fetchTournamentById } from '../../redux/tournaments/tournamentsSlice';
 import { setModalOpen } from '../../redux/user/userSlice';
 import CalculateBetsModal from './components/CalculateBetsModal';
 import CreateBetModal from './components/CreateBetModal';
@@ -31,6 +31,12 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
     dispatch(fetchBets(payload));
     dispatch(fetchMatchById(+params.matchId));
     dispatch(fetchTournamentById(+params.tournamentId));
+
+    return () => {
+      dispatch(clearBets());
+      dispatch(clearCurrentTournament());
+      dispatch(clearMatches());
+    };
   }, [params.matchId, params.tournamentId]);
 
   // Handlers

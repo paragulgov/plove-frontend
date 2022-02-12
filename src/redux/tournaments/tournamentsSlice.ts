@@ -59,6 +59,10 @@ export const tournamentsSlice = createSlice({
       state.skip = 0;
       state.isLoading = false;
     },
+    clearCurrentTournament: state => {
+      state.currentTournament = null;
+      state.isLoading = false;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchTournaments.pending, state => {
@@ -74,8 +78,15 @@ export const tournamentsSlice = createSlice({
       state.isLoading = false;
     });
 
+    builder.addCase(fetchTournamentById.pending, state => {
+      state.isLoading = true;
+    });
     builder.addCase(fetchTournamentById.fulfilled, (state, action: PayloadAction<TournamentData>) => {
       state.currentTournament = action.payload;
+      state.isLoading = false;
+    });
+    builder.addCase(fetchTournamentById.rejected, state => {
+      state.isLoading = false;
     });
 
     builder.addCase(createTournament.fulfilled, (state, action: PayloadAction<TournamentData>) => {
@@ -86,7 +97,7 @@ export const tournamentsSlice = createSlice({
   },
 });
 
-export const { clearTournaments } = tournamentsSlice.actions;
+export const { clearTournaments, clearCurrentTournament } = tournamentsSlice.actions;
 
 export const selectTournaments = (state: RootState) => state.tournaments.data;
 
