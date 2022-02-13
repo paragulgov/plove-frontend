@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
 import { IStringParams } from '../../base/types/BaseTypes';
-import { clearBets, fetchBets } from '../../redux/bets/betsSlice';
+import { checkAccess, clearBets, fetchBets } from '../../redux/bets/betsSlice';
 import { GetBetsQuery } from '../../redux/bets/types';
 import { clearMatches, fetchMatchById } from '../../redux/matches/matchesSlice';
 import { clearCurrentTournament, fetchTournamentById } from '../../redux/tournaments/tournamentsSlice';
@@ -31,6 +31,7 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
     dispatch(fetchBets(payload));
     dispatch(fetchMatchById(+params.matchId));
     dispatch(fetchTournamentById(+params.tournamentId));
+    dispatch(checkAccess(+params.matchId));
 
     return () => {
       dispatch(clearBets());

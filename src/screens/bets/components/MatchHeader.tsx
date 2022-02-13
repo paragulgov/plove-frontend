@@ -12,10 +12,13 @@ const MatchHeader: React.FC<IMatchCardProps> = () => {
   const dispatch = useAppDispatch();
 
   const auth = useAppSelector(state => state.auth.isAuth);
+  const role = useAppSelector(state => state.user.data?.role);
+  const access = useAppSelector(state => state.bets.access);
   const tournament = useAppSelector(state => state.tournaments.currentTournament);
   const match = useAppSelector(state => state.matches.currentMatch);
   const tournamentLoading = useAppSelector(state => state.tournaments.isLoading);
   const matchLoading = useAppSelector(state => state.matches.isLoading);
+  const betsLoading = useAppSelector(state => state.bets.isLoading);
   const totalBets = useAppSelector(state => state.bets.total);
 
   const date =
@@ -53,7 +56,7 @@ const MatchHeader: React.FC<IMatchCardProps> = () => {
             )}
           </Typography>
           <Typography variant="body1">
-            {tournamentLoading ? (
+            {betsLoading ? (
               <Skeleton width="40%" />
             ) : (
               <>
@@ -61,26 +64,40 @@ const MatchHeader: React.FC<IMatchCardProps> = () => {
               </>
             )}
           </Typography>
-          <Typography variant="body1">
-            {tournamentLoading ? (
-              <Skeleton width="50%" />
-            ) : (
-              <>
-                Прогноз можно сделать до: <b>{date}</b>
-              </>
-            )}
-          </Typography>
-          {auth && (
+          {!match?.isFinished && (
+            <Typography variant="body1">
+              {betsLoading ? (
+                <Skeleton width="50%" />
+              ) : (
+                <>
+                  Прогноз можно сделать до: <b>{date}</b>
+                </>
+              )}
+            </Typography>
+          )}
+          {match?.isFinished && (
+            <Typography variant="overline">
+              Результат: {match.homeTeamGoals} - {match.awayTeamGoals}
+            </Typography>
+          )}
+          {auth && !match?.isFinished && (
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} mt={2}>
-              <Button onClick={handleOpenCreateBetModal} variant="contained">
-                Сделать прогноз
-              </Button>
-              <Button onClick={handleOpenUpdateMatchModal} variant="contained">
-                Обновить время
-              </Button>
-              <Button onClick={handleOpenCalculateBetsModal} variant="contained">
-                Завершить матч
-              </Button>
+              {access && (
+                <Button onClick={handleOpenCreateBetModal} variant="contained">
+                  Сделать прогноз
+                </Button>
+              )}
+
+              {(role === 'admin' || role === 'moderator') && (
+                <>
+                  <Button onClick={handleOpenUpdateMatchModal} variant="contained">
+                    Обновить время
+                  </Button>
+                  <Button onClick={handleOpenCalculateBetsModal} variant="contained">
+                    Завершить матч
+                  </Button>
+                </>
+              )}
             </Stack>
           )}
         </Box>

@@ -57,7 +57,7 @@ const MatchBetsList = () => {
 
             {bets.map((bet, index, arr) => {
               return (
-                <>
+                <React.Fragment key={bet.id}>
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar>
                       <Avatar>{bet.user.fullName[0]}</Avatar>
@@ -79,7 +79,7 @@ const MatchBetsList = () => {
                   </ListItem>
 
                   {index < arr.length - 1 && <Divider variant="inset" component="li" />}
-                </>
+                </React.Fragment>
               );
             })}
           </List>

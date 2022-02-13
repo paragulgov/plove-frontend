@@ -5,6 +5,7 @@ export interface BetsState {
   total: number;
   skip: number;
   isLoading: boolean;
+  access: boolean;
 }
 
 export interface BetsData {
@@ -32,9 +33,15 @@ export interface GetBetsQuery {
   skip?: number;
 }
 
+export interface CreateBetValues {
+  homeTeamGoalsBet: string;
+  awayTeamGoalsBet: string;
+}
+
 export interface CreateBetDto {
-  homeTeam: string;
-  awayTeam: string;
+  homeTeamGoalsBet: number;
+  awayTeamGoalsBet: number;
+  matchId: number;
 }
 
 export interface UpdateBetDto extends CreateBetDto {

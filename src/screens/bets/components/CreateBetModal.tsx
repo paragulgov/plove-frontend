@@ -1,62 +1,79 @@
 import { Box, Button, Modal, TextField, Typography } from '@mui/material';
 import React, { ChangeEvent, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { useAppDispatch, useAppSelector } from '../../../base/hooks/hooks';
+import { IStringParams } from '../../../base/types/BaseTypes';
+import { createBet } from '../../../redux/bets/betsSlice';
+import { CreateBetDto, CreateBetValues } from '../../../redux/bets/types';
+import { modalStyles } from '../../../styles/commonStyles';
 
 interface ICreateBetModalProps {
   handleClose: () => void;
   open: boolean;
 }
 
-const CreateBetModal: React.FC<ICreateBetModalProps> = props => {
-  const { handleClose, open } = props;
+const CreateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) => {
+  const params = useParams<IStringParams>();
+  const dispatch = useAppDispatch();
 
-  const [homeGoals, setHomeGoals] = useState<string>('');
+  const [values, setValues] = useState<CreateBetValues>({ homeTeamGoalsBet: '', awayTeamGoalsBet: '' });
+  const disabled = !/^\d+$/i.test(values.homeTeamGoalsBet) || !/^\d+$/i.test(values.awayTeamGoalsBet);
 
+  const match = useAppSelector(state => state.matches.currentMatch);
+
+  // Handlers
   const handleChangeHomeGoals = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setHomeGoals(event.target.value);
+    const { name, value } = event.target;
+
+    setValues({ ...values, [name]: value });
+  };
+
+  const handleCreateBet = () => {
+    const payload: CreateBetDto = {
+      homeTeamGoalsBet: +values.homeTeamGoalsBet,
+      awayTeamGoalsBet: +values.awayTeamGoalsBet,
+      matchId: +params.matchId,
+    };
+
+    dispatch(createBet(payload));
+
+    setValues({ awayTeamGoalsBet: '', homeTeamGoalsBet: '' });
   };
 
   return (
     <Modal open={open} onClose={handleClose}>
-      <Box sx={style}>
+      <Box sx={modalStyles}>
         <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
           Сделать прогноз
         </Typography>
-        <Typography sx={{ mb: 3 }}>Ливерпуль - Челси</Typography>
+        <Typography sx={{ mb: 3 }}>
+          {match?.homeTeam} - {match?.awayTeam}
+        </Typography>
 
         <TextField
-          value={homeGoals}
+          value={values.homeTeamGoalsBet}
           onChange={handleChangeHomeGoals}
+          name="homeTeamGoalsBet"
           label="Голы домашней команды"
           fullWidth
           sx={{ mb: 2 }}
         />
         <TextField
-          value={homeGoals}
+          value={values.awayTeamGoalsBet}
           onChange={handleChangeHomeGoals}
+          name="awayTeamGoalsBet"
           label="Голы выездной команды"
           fullWidth
           sx={{ mb: 2 }}
         />
 
-        <Button variant="contained" disabled={!/^\d+$/i.test(homeGoals)} fullWidth>
+        <Button onClick={handleCreateBet} variant="contained" disabled={disabled} fullWidth>
           Отправить
         </Button>
       </Box>
     </Modal>
   );
-};
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: 600,
-  minWidth: 300,
-  bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 24,
-  p: 4,
 };
 
 export default CreateBetModal;
