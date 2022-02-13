@@ -78,6 +78,7 @@ export const betsSlice = createSlice({
     builder.addCase(createBet.fulfilled, (state, action: PayloadAction<BetsData>) => {
       if (action.payload.id) {
         state.data.unshift(action.payload);
+        state.access = false;
       }
     });
   },
