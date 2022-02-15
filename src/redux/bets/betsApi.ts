@@ -1,5 +1,5 @@
 import { instance } from '../../base/api';
-import { CreateBetDto, GetBetsQuery, UpdateBetDto } from './types';
+import { CreateBetDto, GetBetsQuery } from './types';
 
 export const BetsApi = {
   fetchBets({ matchId, take, skip }: GetBetsQuery) {
@@ -9,10 +9,9 @@ export const BetsApi = {
     return instance.get(`bets/checkAccess/${matchId}`);
   },
   createBet(payload: CreateBetDto) {
-    return instance.post(`bets`, payload);
+    return instance.post(`matches/bets`, payload);
   },
-  updateBet(payload: UpdateBetDto) {
-    const { id, ...data } = payload;
-    return instance.patch(`matches/${id}`, data);
+  updateBet(payload: CreateBetDto) {
+    return instance.patch(`matches/bets`, payload);
   },
 };

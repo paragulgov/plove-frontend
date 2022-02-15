@@ -4,6 +4,7 @@ import { RootState } from '../../base/store';
 import { setModalOpen, setSnackbar } from '../user/userSlice';
 import { MatchesApi } from './matchesApi';
 import {
+  CalculateMatchDto,
   CreateMatchDto,
   MatchData,
   MatchesPayload,
@@ -64,6 +65,21 @@ export const updateMatch = createAsyncThunk(
     }
   },
 );
+
+export const calculateMatch = createAsyncThunk('bets/calculateBets', async (payload: CalculateMatchDto, thunkAPI) => {
+  if (!isNaN(payload.homeTeamGoals && payload.awayTeamGoals)) {
+    try {
+      const { data } = await MatchesApi.resultMatch(payload);
+      if (data.message) {
+        thunkAPI.dispatch(setSnackbar({ open: true, severity: 'success', message: data.message }));
+      }
+    } catch (err) {
+      thunkAPI.dispatch(setSnackbar({ open: true, severity: 'error', message: 'Упс, что-то пошло не так' }));
+    } finally {
+      thunkAPI.dispatch(setModalOpen({ modal: 'calculateBets', value: false }));
+    }
+  }
+});
 
 export const matchesSlice = createSlice({
   name: 'matches',

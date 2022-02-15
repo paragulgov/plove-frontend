@@ -45,3 +45,14 @@ export interface UpdateMatchRequestPayload {
   id: number;
   betsWillEndAt: string;
 }
+
+export interface CalculateMatchValues {
+  homeTeamGoals: string;
+  awayTeamGoals: string;
+}
+
+export interface CalculateMatchDto {
+  id: number;
+  homeTeamGoals: number;
+  awayTeamGoals: number;
+}

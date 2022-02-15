@@ -52,7 +52,7 @@ const TournamentsScreen: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       {guard && (
-        <Button onClick={handleOpenCreateTournamentModal} sx={{ mb: 3 }}>
+        <Button onClick={handleOpenCreateTournamentModal} sx={{ mb: 3 }} color="secondary">
           Создать турнир
         </Button>
       )}

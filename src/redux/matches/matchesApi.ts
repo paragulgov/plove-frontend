@@ -1,5 +1,5 @@
 import { instance } from '../../base/api';
-import { CreateMatchDto, MatchesPayload, UpdateMatchRequestPayload } from './types';
+import { CalculateMatchDto, CreateMatchDto, MatchesPayload, UpdateMatchRequestPayload } from './types';
 
 export const MatchesApi = {
   fetchMatches({ tournamentId, take, skip }: MatchesPayload) {
@@ -14,5 +14,9 @@ export const MatchesApi = {
   updateMatch(payload: UpdateMatchRequestPayload) {
     const { id, ...data } = payload;
     return instance.patch(`matches/${id}`, data);
+  },
+  resultMatch(payload: CalculateMatchDto) {
+    const { id, ...data } = payload;
+    return instance.patch(`matches/result/${id}`, data);
   },
 };

@@ -27,9 +27,17 @@ const MatchHeader: React.FC<IMatchCardProps> = () => {
       locale: ru,
     });
 
+  const matchEndTime = match && new Date(match.betsWillEndAt).getTime();
+  const nowTime = new Date().getTime();
+  const timeAccess = matchEndTime && matchEndTime > nowTime;
+
   // Handlers
   const handleOpenCreateBetModal = () => {
     dispatch(setModalOpen({ modal: 'createBet', value: true }));
+  };
+
+  const handleOpenUpdateBetModal = () => {
+    dispatch(setModalOpen({ modal: 'updateBet', value: true }));
   };
 
   const handleOpenCalculateBetsModal = () => {
@@ -82,18 +90,24 @@ const MatchHeader: React.FC<IMatchCardProps> = () => {
           )}
           {auth && !match?.isFinished && (
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={3} mt={2}>
-              {access && (
+              {access && timeAccess && (
                 <Button onClick={handleOpenCreateBetModal} variant="contained">
                   Сделать прогноз
                 </Button>
               )}
 
+              {!access && timeAccess && (
+                <Button onClick={handleOpenUpdateBetModal} variant="contained">
+                  Обновить прогноз
+                </Button>
+              )}
+
               {(role === 'admin' || role === 'moderator') && (
                 <>
-                  <Button onClick={handleOpenUpdateMatchModal} variant="contained">
+                  <Button onClick={handleOpenUpdateMatchModal} variant="contained" color="secondary">
                     Обновить время
                   </Button>
-                  <Button onClick={handleOpenCalculateBetsModal} variant="contained">
+                  <Button onClick={handleOpenCalculateBetsModal} variant="contained" color="secondary">
                     Завершить матч
                   </Button>
                 </>

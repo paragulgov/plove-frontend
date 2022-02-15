@@ -43,6 +43,22 @@ export const createBet = createAsyncThunk('bets/createBet', async (payload: Crea
   }
 });
 
+export const updateBet = createAsyncThunk('bets/updateBet', async (payload: CreateBetDto, thunkAPI) => {
+  if (!isNaN(payload.matchId && payload.homeTeamGoalsBet && payload.awayTeamGoalsBet)) {
+    try {
+      const { data } = await BetsApi.updateBet(payload);
+
+      thunkAPI.dispatch(setSnackbar({ open: true, severity: 'success', message: 'Прогноз обновлен' }));
+
+      return data;
+    } catch (err) {
+      thunkAPI.dispatch(setSnackbar({ open: true, severity: 'error', message: 'Упс, что-то пошло не так' }));
+    } finally {
+      thunkAPI.dispatch(setModalOpen({ modal: 'createBet', value: false }));
+    }
+  }
+});
+
 export const betsSlice = createSlice({
   name: 'bets',
   initialState,

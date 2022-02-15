@@ -13,6 +13,7 @@ import CalculateBetsModal from './components/CalculateBetsModal';
 import CreateBetModal from './components/CreateBetModal';
 import MatchBetsList from './components/MatchBetsList';
 import MatchHeader from './components/MatchHeader';
+import UpdateBetModal from './components/UpdateBetModal';
 import UpdateMatchModal from './components/UpdateMatchModal';
 
 interface IMatchCardProps {}
@@ -24,6 +25,7 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
   const createBetModal = useAppSelector(state => state.user.modalOpen.createBet);
   const calculateBets = useAppSelector(state => state.user.modalOpen.calculateBets);
   const updateMatch = useAppSelector(state => state.user.modalOpen.updateMatch);
+  const updateBet = useAppSelector(state => state.user.modalOpen.updateBet);
 
   // Effects
   useEffect(() => {
@@ -45,6 +47,10 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
     dispatch(setModalOpen({ modal: 'createBet', value: false }));
   };
 
+  const handleCloseUpdateBetModal = () => {
+    dispatch(setModalOpen({ modal: 'updateBet', value: false }));
+  };
+
   const handleCloseCalculateBetsModal = () => {
     dispatch(setModalOpen({ modal: 'calculateBets', value: false }));
   };
@@ -62,6 +68,7 @@ const BetsScreen: React.FC<IMatchCardProps> = () => {
       <CreateBetModal open={createBetModal} handleClose={handleCloseCreateBetModal} />
       <CalculateBetsModal open={calculateBets} handleClose={handleCloseCalculateBetsModal} />
       <UpdateMatchModal open={updateMatch} handleClose={handleCloseUpdateMatchModal} />
+      <UpdateBetModal open={updateBet} handleClose={handleCloseUpdateBetModal} />
     </Container>
   );
 };

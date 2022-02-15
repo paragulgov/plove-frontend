@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../../base/hooks/hooks';
 import { IStringParams } from '../../../base/types/BaseTypes';
-import { createBet } from '../../../redux/bets/betsSlice';
+import { updateBet } from '../../../redux/bets/betsSlice';
 import { CreateBetDto, CreateBetValues } from '../../../redux/bets/types';
 import { modalStyles } from '../../../styles/commonStyles';
 
@@ -13,7 +13,7 @@ interface ICreateBetModalProps {
   open: boolean;
 }
 
-const CreateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) => {
+const UpdateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) => {
   const params = useParams<IStringParams>();
   const dispatch = useAppDispatch();
 
@@ -29,14 +29,14 @@ const CreateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) =
     setValues({ ...values, [name]: value });
   };
 
-  const handleCreateBet = () => {
+  const handleUpdateBet = () => {
     const payload: CreateBetDto = {
       homeTeamGoalsBet: +values.homeTeamGoalsBet,
       awayTeamGoalsBet: +values.awayTeamGoalsBet,
       matchId: +params.matchId,
     };
 
-    dispatch(createBet(payload));
+    dispatch(updateBet(payload));
 
     setValues({ awayTeamGoalsBet: '', homeTeamGoalsBet: '' });
   };
@@ -45,7 +45,7 @@ const CreateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) =
     <Modal open={open} onClose={handleClose}>
       <Box sx={modalStyles}>
         <Typography variant="h6" component="h2" sx={{ mb: 1 }}>
-          Сделать прогноз
+          Обновить прогноз
         </Typography>
         <Typography sx={{ mb: 3 }}>
           {match?.homeTeam} - {match?.awayTeam}
@@ -68,12 +68,12 @@ const CreateBetModal: React.FC<ICreateBetModalProps> = ({ handleClose, open }) =
           sx={{ mb: 2 }}
         />
 
-        <Button onClick={handleCreateBet} variant="contained" disabled={disabled} fullWidth>
-          Отправить
+        <Button onClick={handleUpdateBet} variant="contained" disabled={disabled} fullWidth>
+          Обновить
         </Button>
       </Box>
     </Modal>
   );
 };
 
-export default CreateBetModal;
+export default UpdateBetModal;

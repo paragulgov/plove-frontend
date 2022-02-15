@@ -64,13 +64,14 @@ const MatchesSection: React.FC = () => {
       )}
 
       <Stack spacing={3} mb={3}>
-        {matches.map(({ id, homeTeam, awayTeam, betsWillEndAt }) => {
+        {matches.map(({ id, homeTeam, awayTeam, betsWillEndAt, isFinished }) => {
           return (
             <MatchCard
               key={id}
               homeTeam={homeTeam}
               awayTeam={awayTeam}
               betsWillEndAt={betsWillEndAt}
+              isFinished={isFinished}
               path={makePath(routes.BetsScreen.path, [
                 {
                   p: 'tournamentId',

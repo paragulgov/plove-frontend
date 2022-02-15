@@ -43,7 +43,3 @@ export interface CreateBetDto {
   awayTeamGoalsBet: number;
   matchId: number;
 }
-
-export interface UpdateBetDto extends CreateBetDto {
-  id: number;
-}

@@ -2,7 +2,13 @@ import { AlertColor } from '@mui/material/Alert/Alert';
 
 import { UserRole } from '../../types/types';
 
-export type UserModals = 'createBet' | 'calculateBets' | 'createMatch' | 'updateMatch' | 'createTournament';
+export type UserModals =
+  | 'createBet'
+  | 'calculateBets'
+  | 'updateBet'
+  | 'createMatch'
+  | 'updateMatch'
+  | 'createTournament';
 
 export interface UserModalsPayload {
   modal: keyof Record<UserModals, boolean>;
