@@ -70,9 +70,15 @@ export const calculateMatch = createAsyncThunk('bets/calculateBets', async (payl
   if (!isNaN(payload.homeTeamGoals && payload.awayTeamGoals)) {
     try {
       const { data } = await MatchesApi.resultMatch(payload);
-      if (data.message) {
-        thunkAPI.dispatch(setSnackbar({ open: true, severity: 'success', message: data.message }));
-      }
+      thunkAPI.dispatch(
+        setSnackbar({
+          open: true,
+          severity: 'success',
+          message: 'Матч завершен. Прогнозы посчитаны. Таблица обновлена',
+        }),
+      );
+
+      return data;
     } catch (err) {
       thunkAPI.dispatch(setSnackbar({ open: true, severity: 'error', message: 'Упс, что-то пошло не так' }));
     } finally {
@@ -125,6 +131,12 @@ export const matchesSlice = createSlice({
     });
 
     builder.addCase(updateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
+      if (action.payload && state.currentMatch) {
+        state.currentMatch = action.payload;
+      }
+    });
+
+    builder.addCase(calculateMatch.fulfilled, (state, action: PayloadAction<MatchData>) => {
       if (action.payload && state.currentMatch) {
         state.currentMatch = action.payload;
       }
