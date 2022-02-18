@@ -9,6 +9,7 @@ import {
   CreateTournamentValues,
   TournamentData,
   TournamentsState,
+  TableData,
 } from './types';
 
 const initialState: TournamentsState = {
@@ -17,6 +18,7 @@ const initialState: TournamentsState = {
   total: 0,
   skip: 0,
   isLoading: false,
+  table: [],
 };
 
 export const fetchTournaments = createAsyncThunk(
@@ -31,6 +33,14 @@ export const fetchTournamentById = createAsyncThunk('tournaments/fetchTournament
   const { data } = await TournamentsApi.fetchTournamentById(id);
   return data;
 });
+
+export const fetchTournamentTable = createAsyncThunk(
+  'tournaments/fetchTournamentTable',
+  async (tournamentId: number) => {
+    const { data } = await TournamentsApi.fetchTournamentStatistic(tournamentId);
+    return data;
+  },
+);
 
 export const createTournament = createAsyncThunk(
   'tournaments/createTournament',
@@ -58,6 +68,7 @@ export const tournamentsSlice = createSlice({
       state.total = 0;
       state.skip = 0;
       state.isLoading = false;
+      state.table = [];
     },
     clearCurrentTournament: state => {
       state.currentTournament = null;
@@ -92,6 +103,12 @@ export const tournamentsSlice = createSlice({
     builder.addCase(createTournament.fulfilled, (state, action: PayloadAction<TournamentData>) => {
       if (action.payload.id) {
         state.data.unshift(action.payload);
+      }
+    });
+
+    builder.addCase(fetchTournamentTable.fulfilled, (state, action: PayloadAction<TableData[]>) => {
+      if (action.payload) {
+        state.table = action.payload;
       }
     });
   },

@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../base/hooks/hooks';
 import { setModalOpen } from '../../redux/user/userSlice';
 import CreateMatchModal from './components/CreateMatchModal';
 import MatchesSection from './components/MatchesSection';
+import TableSection from './components/TableSection';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -64,7 +65,7 @@ const MatchesScreen: React.FC = () => {
           <MatchesSection />
         </TabPanel>
         <TabPanel value={tab} index={1}>
-          Турнирая таблица игроков
+          <TableSection />
         </TabPanel>
       </Box>
 

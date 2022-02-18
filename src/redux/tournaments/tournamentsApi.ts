@@ -9,6 +9,9 @@ export const TournamentsApi = {
   fetchTournamentById(id: number) {
     return instance.get(`tournaments/${id}`);
   },
+  fetchTournamentStatistic(tournamentId: number) {
+    return instance.get(`statistics/tournament?id=${tournamentId}`);
+  },
   createTournaments(payload: CreateTournamentValues) {
     return instance.post(`tournaments`, payload);
   },
